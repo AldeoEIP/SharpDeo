@@ -11,7 +11,7 @@ namespace SharpDeo
 {
 	public class Client
 	{
-		private const string BaseUrl = "https://aldeo.io";
+		private const string BaseUrl = "https://aldeo.io/api/";
 
 		public Task<List<Foo>> GetFooAsync() { return GetAsync<List<Foo>>("api/model"); }
 
