@@ -16,16 +16,17 @@ namespace SharpDeo {
         private string Token { get; set; }
 
         public async Task LoginAsync(string login, string password) {
-            //users / login
             using (var httpClient = new HttpClient ()) {
 
-                var values = new Dictionary<string, string> { { "login", login }, { "password", password } };
-                var content = new FormUrlEncodedContent (values);
+                var encodedContent = new FormUrlEncodedContent (
+                    new Dictionary<string, string> { { "login", login }, { "password", password } });
 
-                var response = await httpClient.PostAsync (BaseUrl + "users/login", content).ConfigureAwait (false);
-                if (response.StatusCode == HttpStatusCode.OK) { // else throw error?
-                    Token = await response.Content.ReadAsStringAsync ().ConfigureAwait (false);
-                }
+                var response = await httpClient.PostAsync (BaseUrl + "users/login", encodedContent).ConfigureAwait (false);
+                if (!response.IsSuccessStatusCode)
+                    throw new HttpRequestException ($"{response.StatusCode} {response.ReasonPhrase}"); // ToDo: is valid?
+
+                var content = await response.Content.ReadAsStringAsync ().ConfigureAwait (false);
+                Token = content.Replace ("\"", string.Empty);
             }
         }
 
