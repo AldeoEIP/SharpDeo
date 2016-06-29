@@ -7,9 +7,38 @@
       mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Click="ButtonBase_OnClick"
-                Content="hello" />
+        <ListView>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <Button Margin="24, 12"
+                    HorizontalAlignment="Stretch"
+                    Click="ButtonBase_OnClick"
+                    Content="hello" />
+            <Button Margin="24, 12"
+                    HorizontalAlignment="Stretch"
+                    Click="Users_OnClick"
+                    Content="users" />
+            <Button Margin="24, 12"
+                    HorizontalAlignment="Stretch"
+                    Click="User_OnClick"
+                    Content="users" />
+            <TextBox x:Name="dico"
+                     Margin="24, 12"
+                     Text="Poney" />
+            <Button Margin="24, 12"
+                    HorizontalAlignment="Stretch"
+                    Click="Dictionary_OnClick"
+                    Content="Dictionary" />
+            <TextBox x:Name="wolf"
+                     Margin="24, 12"
+                     Text="2+2" />
+            <Button Margin="24, 12"
+                    HorizontalAlignment="Stretch"
+                    Click="Math_OnClick"
+                    Content="Math" />
+        </ListView>
     </Grid>
 </Page>
