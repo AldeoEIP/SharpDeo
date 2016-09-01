@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SharpDeo.Extensions;
 using SharpDeo.Model;
 
 namespace SharpDeo {
     public class Client : IDisposable {
-        private const string BaseUrl = "http://aldeo.io/api/";
+        private const string BaseUrl = "https://aldeo.io/api/";
         private static readonly HttpClient HttpClient = new HttpClient {BaseAddress = new Uri(BaseUrl)};
         private string Token { get; set; }
 
@@ -34,11 +36,35 @@ namespace SharpDeo {
             return table;
         }
 
-        // avoir une définition
-        public Task<string> GetDictionaryDefintionAsync(string word) {
+        public async Task<string> CreateUserAsync(Noob noob) {
+            const string requestUri = "users";
+            var response = await CreateFieldAsync (noob, Token, requestUri).ConfigureAwait (false);
+            // check for fail
+            return response;
+        }
+
+        public Task<Knowledge> GetDictionaryDefintionAsync(string word) {
             const string requestUri = "wiktionaries/getDefinition";
             const string key = "word";
-            return PostAsync (Token, requestUri, key, word.ToLower());
+            return GetKnowledgeAsync (requestUri, key, word.ToLower ());
+        }
+
+        public Task<Knowledge> GetEncyclopediaDefintionAsync(string word) {
+            const string requestUri = "wikipedias/getExtract";
+            const string key = "text";
+            return GetKnowledgeAsync (requestUri, key, word.ToLower ());
+        }
+
+        public async Task<Knowledge> GetKnowledgeAsync(string requestUri, string key, string notion) {
+            var json = await PostAsync (Token, requestUri, key, notion).ConfigureAwait (false);
+            var knowledge = JsonConvert.DeserializeObject<Knowledge> (json);
+            return knowledge;
+        }
+
+        public Task<string> GetAnswerAsync(string question) {
+            const string requestUri = "aimls/answer";
+            const string key = "text";
+            return PostAsync (Token, requestUri, key, question);
         }
 
         // avoir le résultat d’un calcul
@@ -54,7 +80,7 @@ namespace SharpDeo {
             return GetFieldAsync<IEnumerable<T>> (token, requestUri);
         }
 
-        // voir un champa
+        // voir un champs
         // ne supporte pas /light
         public static async Task<T> GetFieldAsync<T>(string token, string requestUri) where T : class {
             var json = await GetAsync (token, requestUri).ConfigureAwait (false);
@@ -63,17 +89,27 @@ namespace SharpDeo {
         }
 
         //créer un champs
-        //public static Task CreateFieldAsync<T>(string token, string requestUri) {
-        //    requestUri += "/create";
+        public static Task<string> CreateFieldAsync<T>(T field, string token, string requestUri) {
 
-        //    var content = JsonConvert.DeserializeObject<User>(new User
-        //    {
-        //        Created = new ServerDateTime { Date = DateTime.Now.ToString(), Timezone = Time}
-        //    });
+            Func<string, string> e = s => $"\"s\"";
 
-        //    var httpContent = new StringContent (string.Empty); // should add user in content as json?
-        //    return SendAsync (token, HttpMethod.Post, requestUri, httpContent);
-        //}
+            using (var multipartFormDataContent = new MultipartFormDataContent ()) {
+                foreach (var keyValuePair in new[]
+                {
+                    new KeyValuePair<string, string>("login", "TheLordOfTheRings"),
+                    new KeyValuePair<string, string>("email", "Soso91@hotmail.fr"),
+                    new KeyValuePair<string, string>("password", "1ringToRule"),
+                    new KeyValuePair<string, string>("firstname", "Sauron"),
+                    new KeyValuePair<string, string>("lastname", "Duhamel"),
+                    new KeyValuePair<string, string>("companionName", "Saroumane")
+                })
+                    multipartFormDataContent.Add (new StringContent (keyValuePair.Value), e (keyValuePair.Key));
+
+                //var encodedContent = new FormUrlEncodedContent(field.ToDictionaryOfString<T>());
+                var httpContent = multipartFormDataContent;
+                return SendAsync (token, HttpMethod.Post, requestUri + "/create", httpContent);
+            }
+        }
 
         // editer un champs
         //public static Task EditFieldAsync<T>(string token, string requestUri) {

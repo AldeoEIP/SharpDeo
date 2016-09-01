@@ -18,9 +18,9 @@
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
-    <Id>SharpDeo-alpha</Id>
-    <Version>0.1.0</Version>
-    <Title>SharpDeo-alpha</Title>
+    <Id>SharpDeo</Id>
+    <Version>0.2.0-beta</Version>
+    <Title>SharpDeo</Title>
     <Authors>aloisdg</Authors>
     <Owners>aloisdg</Owners>
     <Summary>SharpDeo alpha</Summary>
@@ -34,9 +34,6 @@
     <Copyright>Copyright © aloisdg</Copyright>
     <Tags>SharpDeo Aldeo EIP Epitech</Tags>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="Readme.txt" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpDeo\SharpDeo.csproj" />
   </ItemGroup>
