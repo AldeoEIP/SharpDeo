@@ -109,9 +109,11 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Extensions\ObjectToDictionary.cs" />
-    <Compile Include="Model\knowledge.cs" />
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="Model\Knowledge.cs" />
     <Compile Include="Model\Noob.cs" />
     <Compile Include="Model\TheoricUser.cs" />
+    <Compile Include="Model\Translate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\ServerDateTime.cs" />
     <Compile Include="Model\User.cs" />
