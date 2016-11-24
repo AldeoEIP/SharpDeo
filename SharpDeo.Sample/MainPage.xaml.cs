@@ -36,10 +36,10 @@ namespace SharpDeo.Sample {
         }
 
         private async void Dictionary_OnClick(object sender, RoutedEventArgs e) {
-            var result = await _client.GetDictionaryDefintionAsync ("poney").ConfigureAwait (false);
+            var result = await _client.GetDictionaryDefintionAsync (dico.Text).ConfigureAwait (false);
             Debug.WriteLine (result.Extract);
 
-            var result2 = await _client.GetEncyclopediaDefintionAsync ("poney").ConfigureAwait (false);
+            var result2 = await _client.GetEncyclopediaDefintionAsync (dico.Text).ConfigureAwait (false);
             Debug.WriteLine (result2.Extract);
         }
 
